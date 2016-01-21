@@ -1,0 +1,13 @@
+{
+  "name": "office-doors",
+  "moduleName": "office-doors",
+  "description": "",
+  "version": "0.1.0",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "bower": "^1.7.2",
+    "gulp": "^3.9.0",
+    "gulp-webserver": "^0.9.1"
+  },
+  "author": "Rafael Pérez García, DevSpark"
+}

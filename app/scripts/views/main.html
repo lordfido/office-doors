@@ -1,0 +1,56 @@
+
+<!-- Video panel -->
+<div class="video">
+  <!-- <div ng-if="!isMobile" class="overlay"></div> -->
+  <img ng-if="loaded && !isMobile" ng-src="{{ cameraImg }}" alt="Video camera" />
+  <!-- <div class="video-wrapper">
+    <video autoplay="true" muted="true">
+      <source src="images/mock_video.mp4" type="video/mp4">
+    </video>
+  </div> -->
+</div>
+
+<!-- Anonimus: HUD panel -->
+<div ng-if="!user" class="hud">
+  <google-plus-signin clientid="{{ clientId }}" language="es"></google-plus-signin>
+</div>
+
+<!-- User: HUD panel -->
+<div ng-if="user" class="hud fixed-height">
+  <div class="user">
+    <img ng-src="{{ user.image }}" />
+    <span class="username">{{ user.name }}</span>
+    <span class="alias">({{ user.alias }})</span>
+  </div>
+
+  <a class="btn btn-primary" ng-click="newAlias()"><i class="glyphicon glyphicon-user" ></i> Alias</a>
+
+  <!-- Disconnect -->
+  <a class="btn btn-danger" ng-click="logout()"><i class="glyphicon glyphicon-log-out" ></i> Desconectar</a>
+
+  <!-- Button -->
+  <span class="main-btn mobile" ng-click="openDoors(true)" ng-if="user.validated">
+    <i class="fa" ng-class="{'fa-lock': !open, 'fa-unlock': open}"></i>
+  </span>
+  <span class="main-btn no-mobile" ng-click="openDoors(false)" ng-if="user.validated">
+    <i class="fa" ng-class="{'fa-lock': !open, 'fa-unlock': open}"></i>
+  </span>
+
+  <!-- Countdown -->
+  <div
+    ng-if="user.validated"
+    round-progress
+    max="maxTime"
+    current="currentTime"
+    color="{{ countdown.color }}"
+    bgcolor="{{ countdown.bgColor }}"
+    radius="{{ countdown.radius }}"
+    stroke="{{ countdown.stroke }}"
+    semi="countdown.semi"
+    rounded="countdown.rounded"
+    clockwise="countdown.clockwise"
+    responsive="countdown.responsive"
+    duration="{{ countdown.duration }}"
+    animation="{{ countdown.animation }}"
+    animation-delay="{{ countdown.animationDelay }}"></div>
+</div>
