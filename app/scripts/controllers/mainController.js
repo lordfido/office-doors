@@ -54,7 +54,7 @@ officeDoors.controller('mainController',
           };
 
           if(openToMySelf){
-            params.texto = localStorageService.get('alias')
+            params.texto = localStorageService.get($scope.user.userId);
           }
 
           services.openDoors(params).success(function(response){
@@ -140,7 +140,7 @@ officeDoors.controller('mainController',
       /* Save */
       modalInstance.result.then(function (newAlias) {
         $scope.user.alias = newAlias;
-        localStorageService.set('alias', $scope.user.alias);
+        localStorageService.set($scope.user.userId, $scope.user.alias);
 
       /* Cancel */
       }, function () {
@@ -219,12 +219,12 @@ officeDoors.controller('mainController',
           $scope.user = data;
 
           /* Create an alias, if there isn't */
-          if(localStorageService.get('alias')){
+          if(localStorageService.get($scope.user.userId)){
             $scope.user.alias = localStorageService.get('alias');
           }
           else{
             $scope.user.alias = $scope.user.name.substring(0, $scope.user.name.indexOf(" "));
-            localStorageService.set('alias', $scope.user.alias);
+            localStorageService.set($scope.user.userId, $scope.user.alias);
           }
 
           /* Login on app's backend */
