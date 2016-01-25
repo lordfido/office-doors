@@ -30,5 +30,14 @@ officeDoors.service('services',
       }
     };
 
+    /* Open the door */
+    service.talk = function(params){
+      return $http({
+        method: 'POST',
+        url: SVC_URL.talk,
+        data: params
+      });
+    };
+
     return service;
 }]);

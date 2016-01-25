@@ -6,6 +6,7 @@ officeDoors.controller('mainController',
     var colorOpen = '#5cb85c';
     var imgName = 'cam.jpg';
     var imgRefreshTime = 150;
+    var coded = "";
 
     $scope.init = function(){
       $scope.loaded = true;
@@ -59,13 +60,18 @@ officeDoors.controller('mainController',
 
           services.openDoors(params).success(function(response){
 
-            if(response != false && response != "false"){
+            if(response == "busy"){
+
+              Notification.error("La puerta ya estaba abierta.");
+            }
+            else if(response == false){
+
+              Notification.error("Por favor, inicia sesión para abrir la puerta.");
+            }
+            else{
 
               /* On success, open door animation */
               $scope.openDoor();
-            }
-            else{
-              Notification.error("Por favor, inicia sesión para abrir la puerta.");
             }
           })
           .error(function(status, data, headers, config){
@@ -147,6 +153,29 @@ officeDoors.controller('mainController',
 
       });
     };
+
+    /* Make tony to talk */
+    $scope.saySomething = function(){
+
+      /* Open modal */
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'scripts/views/saySomething.html',
+        controller: 'saySomething'
+      });
+
+      /* Save */
+      modalInstance.result.then(function (text) {
+        var data = {
+          texto: text
+        };
+        services.talk(data);
+
+      /* Cancel */
+      }, function () {
+
+      });
+    }
 
     /* Logout the user */
     $scope.logout = function(){
@@ -253,6 +282,115 @@ officeDoors.controller('mainController',
     $scope.$on('event:google-plus-signin-failure', function (event, authResult) {
       // console.log("There was an error");
       // console.log(authResult);
+    });
+
+    $(document).on('keyup', function(e){
+      if($scope.user && $scope.user.validated && $scope.user.validated === true){
+
+        switch(coded){
+  				case "":
+  					if(e.keyCode == 83){
+  						coded = "s";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "s":
+  					if(e.keyCode == 65){
+  						coded = "sa";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "sa":
+  					if(e.keyCode == 89){
+  						coded = "say";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "say":
+  					if(e.keyCode == 83){
+  						coded = "says";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "says":
+  					if(e.keyCode == 79){
+  						coded = "sayso";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "sayso":
+  					if(e.keyCode == 77){
+  						coded = "saysom";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "saysom":
+  					if(e.keyCode == 69){
+  						coded = "saysome";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "saysome":
+  					if(e.keyCode == 84){
+  						coded = "saysomet";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "saysomet":
+  					if(e.keyCode == 72){
+  						coded = "saysometh";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "saysometh":
+  					if(e.keyCode == 73){
+  						coded = "saysomethi";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "saysomethi":
+  					if(e.keyCode == 78){
+  						coded = "saysomethin";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+  				case "saysomethin":
+  					if(e.keyCode == 71){
+  						coded = "saysomething";
+  					}
+  					else{
+  						coded = "";
+  					}
+  					break;
+        }
+  			if(coded == "saysomething"){
+  				coded = "";
+
+  				$scope.saySomething();
+  			}
+      }
     });
 
     $scope.init();

@@ -1,0 +1,25 @@
+
+<form name="saySomething" role="form" novalidate ng-submit="talk()">
+
+  <div class="modal-header">
+    <h3 class="modal-title">Di algo</h3>
+  </div>
+
+  <div class="modal-body">
+    <p>Haz que Tony diga algo por los altavoces</p>
+    <br />
+
+    <div class="form-group">
+      <input type="text" class="form-control" name="text" ng-model="text" required />
+      <br />
+      <span class="text-danger" ng-if="newAlias.$submitted && newAlias.text.$error.required">
+        Por favor, haz que diga al menos una palabra... algo.
+      </span>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-success" ng-disabled="newAlias.text.$error.required">Hablar</button>
+    <button type="button" class="btn btn-danger" ng-click="cancel()">Cancelar</button>
+  </div>
+</form>
