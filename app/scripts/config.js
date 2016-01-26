@@ -6,14 +6,16 @@ var URLs = {
     streamBaseURL: "http://172.17.1.58:8080/",
     openDoors: "/red/prende",
     login: "/red/login",
-    talk: "/red/say"
+    talk: "/red/say",
+    announceFood: "https://slack.com/api/chat.postMessage"
   },
   dev: {
     baseURL: "http://172.17.1.58:1880/",
     streamBaseURL: "http://172.17.1.58:8080/",
     openDoors: "http://172.17.1.58:1880/red/prende",
     login: "http://172.17.1.58:1880/red/login",
-    talk: "http://172.17.1.58:1880/red/say"
+    talk: "http://172.17.1.58:1880/red/say",
+    announceFood: "https://slack.com/api/chat.postMessage"
   }
 };
 

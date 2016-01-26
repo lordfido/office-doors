@@ -1,6 +1,6 @@
 officeDoors.controller('mainController',
-  ['$scope', '$rootScope', '$timeout', 'services', 'Notification', '$uibModal', 'localStorageService',
-  function ($scope, $rootScope, $timeout, services, Notification, $uibModal, localStorageService) {
+  ['$scope', '$rootScope', '$timeout', 'services', '$uibModal', 'localStorageService',
+  function ($scope, $rootScope, $timeout, services, $uibModal, localStorageService) {
 
     var colorClosed = '#d9534f';
     var colorOpen = '#5cb85c';
@@ -9,21 +9,29 @@ officeDoors.controller('mainController',
     var coded = "";
 
     $scope.init = function(){
+
+      /* App status */
       $scope.loaded = true;
       $scope.isMobile = services.isMobile();
 
+      /* App config */
       $scope.enabled = $rootScope.enabled;
       $scope.cameraImg = SVC_URL.baseURL + imgName;
+      $scope.notifications = (_notify && _notify.permission) ? true : false;
+      $scope.notificationsAllowed = (_notify && _notify.permission === "granted") ? true : false;
 
+      /* User data */
       $scope.userNamePattern = new RegExp("^([a-zA-Z0-9\\-\\_\\+]{3,})$");
       $scope.user = false;
       $scope.Hash = Parse.Object.extend("Token");
       $scope.query = new Parse.Query($scope.Hash);
       $scope.clientId = $rootScope.clientId;
 
+      /* Door data  */
       $scope.open = false;
       $scope.maxTime = 3000;
 
+      /* Countdown data*/
       $scope.currentTime = $scope.maxTime;
       $scope.countdown = {
         color: colorClosed,
@@ -39,8 +47,88 @@ officeDoors.controller('mainController',
         animationDelay: 0
       };
 
+      /* Functions */
       $scope.imageRefresher();
       $scope.getStoredData();
+      $scope.requestNotifications();
+    };
+
+    /* Get stored data */
+    $scope.getStoredData = function(){
+
+      /* If there are saved data */
+      if(localStorageService.get('userId')){
+        $scope.user = {
+          image: localStorageService.get('image'),
+          email: localStorageService.get('email'),
+          name: localStorageService.get('name'),
+          userId: localStorageService.get('userId'),
+          alias: localStorageService.get('alias'),
+          validated: localStorageService.get('validated')
+        };
+
+        // $scope.$apply();
+      }
+    };
+
+    /* Get native notification permission */
+    $scope.requestNotifications = function(){
+      var newImage = new Image();
+      newImage.url = "icons/favicon.png";
+
+      _notify.requestPermission(function(response){
+        if(response === "granted"){
+          $notificationsAllowed = true;
+          // $scope.$apply();
+        }
+      });
+    };
+
+    /* Set a new Alias for the user */
+    $scope.newAlias = function(){
+
+      /* Open modal */
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'scripts/views/newAlias.html',
+        controller: 'newAlias',
+        resolve: {
+          alias: function () {
+            return $scope.user.alias;
+          },
+          userNamePattern: function(){
+            return $scope.userNamePattern;
+          }
+        }
+      });
+
+      /* Save */
+      modalInstance.result.then(function (newAlias) {
+        $scope.user.alias = newAlias;
+        localStorageService.set('alias', $scope.user.alias);
+
+      /* Cancel */
+      }, function () {
+
+      });
+    };
+
+    /* Logout the user */
+    $scope.logout = function(){
+
+      /* Logout from Google */
+      gapi.auth.signOut();
+
+      /* Remove local storage */
+      localStorageService.remove('image');
+      localStorageService.remove('email');
+      localStorageService.remove('name');
+      localStorageService.remove('userId');
+      localStorageService.remove('alias');
+      localStorageService.remove('validated');
+
+      /* Remove the user from the controller */
+      $scope.user = false;
     };
 
     /* Button clicked */
@@ -63,11 +151,11 @@ officeDoors.controller('mainController',
 
             if(response == "busy"){
 
-              Notification.error("La puerta ya estaba abierta.");
+              services.notifyError("La puerta ya estaba abierta.");
             }
             else if(response == false){
 
-              Notification.error("Por favor, inicia sesión para abrir la puerta.");
+              services.notifyError("Por favor, inicia sesión para abrir la puerta.");
             }
             else{
 
@@ -76,7 +164,7 @@ officeDoors.controller('mainController',
             }
           })
           .error(function(status, data, headers, config){
-            Notification.error('Hubo un problema de conexión');
+            services.notifyError('Hubo un problema de conexión');
           });
         }
 
@@ -126,34 +214,17 @@ officeDoors.controller('mainController',
       }, 15);
     };
 
-    /* Set a new Alias for the user */
-    $scope.newAlias = function(){
+    /* Announce the food arrival in Slack */
+    $scope.foodArrived = function(){
+      var data = $rootScope.slack;
 
-      /* Open modal */
-      var modalInstance = $uibModal.open({
-        animation: true,
-        templateUrl: 'scripts/views/newAlias.html',
-        controller: 'newAlias',
-        resolve: {
-          alias: function () {
-            return $scope.user.alias;
-          },
-          userNamePattern: function(){
-            return $scope.userNamePattern;
-          }
-        }
+      services.announceFood(data).success(function(){
+        services.notify("Enviado a Slack");
+      })
+      .error(function(status, data, headers, config){
+        services.notifyError("No se pudo enviar a Slack");
       });
-
-      /* Save */
-      modalInstance.result.then(function (newAlias) {
-        $scope.user.alias = newAlias;
-        localStorageService.set('alias', $scope.user.alias);
-
-      /* Cancel */
-      }, function () {
-
-      });
-    };
+    }
 
     /* Make tony to talk */
     $scope.saySomething = function(){
@@ -177,40 +248,6 @@ officeDoors.controller('mainController',
 
       });
     }
-
-    /* Get stored data */
-    $scope.getStoredData = function(){
-
-      /* If there are saved data */
-      if(localStorageService.get('userId')){
-        $scope.user = {
-          image: localStorageService.get('image'),
-          email: localStorageService.get('email'),
-          name: localStorageService.get('name'),
-          userId: localStorageService.get('userId'),
-          alias: localStorageService.get('alias'),
-          validated: localStorageService.get('validated')
-        };
-      }
-    }
-
-    /* Logout the user */
-    $scope.logout = function(){
-
-      /* Logout from Google */
-      gapi.auth.signOut();
-
-      /* Remove local storage */
-      localStorageService.remove('image');
-      localStorageService.remove('email');
-      localStorageService.remove('name');
-      localStorageService.remove('userId');
-      localStorageService.remove('alias');
-      localStorageService.remove('validated');
-
-      /* Remove the user from the controller */
-      $scope.user = false;
-    };
 
     /* Refresh camera image */
     $scope.imageRefresher = function(){
@@ -283,9 +320,11 @@ officeDoors.controller('mainController',
                   localStorageService.set('userId', $scope.user.userId);
                   localStorageService.set('alias', $scope.user.alias);
                   localStorageService.set('validated', $scope.user.validated);
+
+                  // $scope.$apply();
                 }
                 else{
-                  Notification.error("Tu cuenta no está habilitada");
+                  services.notifyError("Tu cuenta no está habilitada");
                   $scope.user = false;
                   $scope.logout();
                 }
@@ -293,13 +332,15 @@ officeDoors.controller('mainController',
 
               /* Error on login */
               .error(function(status, data, headers, config){
-                Notification.error("Tu cuenta no está habilitada");
+                services.notifyError("Tu cuenta no está habilitada");
                 $scope.user = false;
                 $scope.logout();
               });
             }
             else{
               $scope.user.validated = true;
+
+              // $scope.$apply();
             }
           });
         });
@@ -314,11 +355,11 @@ officeDoors.controller('mainController',
 
     /* Pusher event, someone is opening the door */
     $rootScope.channel.bind('estado_puerta', function(response) {
-      if($scope.user && $scope.user.validation == true && response && response.message === true){
+      if($scope.user && $scope.user.validated == true && response && response.message === true){
 
         /* If there is user data */
-        if(response.usuario && response.usuario != $scope.user.name){
-          Notification(response.usuario +" abrió la puerta");
+        if(response.token && response.token != $scope.user.userId){
+          services.notify(response.usuario +" abrió la puerta");
         }
 
         $scope.openDoor();

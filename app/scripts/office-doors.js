@@ -1,3 +1,7 @@
+if(Notification && Notification.permission){
+  var _notify = Notification;
+}
+
 var officeDoors = angular.module('office-doors', [
   'ui.router',
   'ui.bootstrap',
@@ -9,6 +13,7 @@ var officeDoors = angular.module('office-doors', [
 
 /* Config notificaiton modules */
 .config(function(NotificationProvider) {
+
   NotificationProvider.setOptions({
     delay: 10000,
     startTop: 20,
@@ -44,6 +49,13 @@ var officeDoors = angular.module('office-doors', [
   /* Pusher config */
   $rootScope.pusher = new Pusher('39430a9932b5bb99242f');
   $rootScope.channel = $rootScope.pusher.subscribe('timbre_devspark');
+
+  /* Slack config */
+  $rootScope.slack = {
+    'token': '1234567890',
+    'channel': '#comidamdq',
+    'text': '@here Ya llegó la comida y está esperando en la puerta. El encargado de hoy, que baje a pagar!'
+  };
 
   /* Door enabled */
   $rootScope.enabled = true;

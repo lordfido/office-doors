@@ -1,6 +1,6 @@
 officeDoors.service('services',
-  ['$http', '$rootScope', '$q',
-  function($http, $rootScope, $q) {
+  ['$http', '$rootScope', '$q', 'Notification',
+  function($http, $rootScope, $q, Notification) {
     var service = {};
 
     /* Validate the user on uor database */
@@ -19,6 +19,14 @@ officeDoors.service('services',
         data: params
       });
     };
+
+    service.announceFood = function(params){
+      return $http({
+        method: 'POST',
+        url: SVC_URL.announceFood,
+        data: params
+      });
+    }
 
     /* Say something */
     service.talk = function(params){
@@ -51,6 +59,34 @@ officeDoors.service('services',
       }
       return false;
     };
+
+    /* Notify */
+    service.notify = function(text){
+      if( _notify && _notify.permission && _notify.permission === "granted" ){
+        var options = {
+          "body": text,
+          "icon": "icons/favicon.png"
+        }
+        var notification = new _notify("DevSpark DoorBell", options);
+      }
+      else{
+        Notification(text);
+      }
+    };
+
+    /* Notify an error */
+    service.notifyError = function(text){
+      if( _notify && _notify.permission && _notify.permission === "granted" ){
+        var options = {
+          "body": text,
+          "icon": "icons/favicon.png"
+        }
+        var notification = new _notify("Error", options);
+      }
+      else{
+        Notification.error(text);
+      }
+    }
 
     return service;
 }]);
