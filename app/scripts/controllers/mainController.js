@@ -40,6 +40,7 @@ officeDoors.controller('mainController',
       };
 
       $scope.imageRefresher();
+      $scope.getStoredData();
     };
 
     /* Button clicked */
@@ -177,9 +178,37 @@ officeDoors.controller('mainController',
       });
     }
 
+    /* Get stored data */
+    $scope.getStoredData = function(){
+
+      /* If there are saved data */
+      if(localStorageService.get('userId')){
+        $scope.user = {
+          image: localStorageService.get('image'),
+          email: localStorageService.get('email'),
+          name: localStorageService.get('name'),
+          userId: localStorageService.get('userId'),
+          alias: localStorageService.get('alias'),
+          validated: localStorageService.get('validated')
+        };
+      }
+    }
+
     /* Logout the user */
     $scope.logout = function(){
+
+      /* Logout from Google */
       gapi.auth.signOut();
+
+      /* Remove local storage */
+      localStorageService.remove('image');
+      localStorageService.remove('email');
+      localStorageService.remove('name');
+      localStorageService.remove('userId');
+      localStorageService.remove('alias');
+      localStorageService.remove('validated');
+
+      /* Remove the user from the controller */
       $scope.user = false;
     };
 
@@ -209,6 +238,8 @@ officeDoors.controller('mainController',
         $scope.cameraImg = SVC_URL.baseURL + imgName + "?t=" + cacheAvoider;
       }
 
+      imgRefreshTime = 999999;
+
       $timeout(function () {
         $scope.imageRefresher();
       }, imgRefreshTime);
@@ -217,65 +248,78 @@ officeDoors.controller('mainController',
     /* If google auth works */
     $scope.$on('event:google-plus-signin-success', function (event, authResult) {
 
-      /* Load Google+ API */
-      gapi.client.load('plus', 'v1', function(){
+      /* If there are saved data */
+      if(localStorageService.get('userId')){
+        $scope.getStoredData();
+      }
 
-        /* Get my info from Google*/
-        var data = {
-          userId: 'me'
-        }
-        gapi.client.plus.people.get(data).execute(function(response){
+      /* If there is no user logged in */
+      else{
 
-          /* Parse data */
+        /* Load Google+ API */
+        gapi.client.load('plus', 'v1', function(){
+
+          /* Get my info from Google*/
           var data = {
-            image: response.image.url,
-            email: '',
-            name: response.displayName,
-            userId: response.id
-          };
+            userId: 'me'
+          }
+          gapi.client.plus.people.get(data).execute(function(response){
 
-          /* Get the email */
-          if(response.emails){
-            for(var x in response.emails){
-              if(response.emails[0].type == "account"){
-                data.email = response.emails[x].value;
-                break;
+            /* Parse data */
+            var data = {
+              image: response.image.url,
+              email: '',
+              name: response.displayName,
+              userId: response.id
+            };
+
+            /* Get the email */
+            if(response.emails){
+              for(var x in response.emails){
+                if(response.emails[x].type == "account"){
+                  data.email = response.emails[x].value;
+                  break;
+                }
               }
             }
-          }
 
-          /* Save user data */
-          $scope.user = data;
-
-          /* Create an alias, if there isn't */
-          if(localStorageService.get($scope.user.userId)){
-            $scope.user.alias = localStorageService.get('alias');
-          }
-          else{
+            /* Save user data */
+            $scope.user = data;
             $scope.user.alias = $scope.user.name.substring(0, $scope.user.name.indexOf(" "));
-            localStorageService.set($scope.user.userId, $scope.user.alias);
-          }
 
-          /* Login on app's backend */
-          if($scope.enabled){
-            services.login(data).success(function(response){
-              if(response != false && response != "false"){
-                $scope.user.validated = true;
-              }
-            })
+            /* Login on app's backend */
+            if($scope.enabled){
+              services.login(data).success(function(response){
+                if(response != false && response != "false"){
+                  $scope.user.validated = true;
 
-            /* Error on login */
-            .error(function(status, data, headers, config){
-              Notification.error("Tu cuenta no está habilitada");
-              $scope.user = false;
-              $scope.logout();
-            });
-          }
-          else{
-            $scope.user.validated = true;
-          }
+                  localStorageService.set('image', $scope.user.image);
+                  localStorageService.set('email', $scope.user.email);
+                  localStorageService.set('name', $scope.user.name);
+                  localStorageService.set('userId', $scope.user.userId);
+                  localStorageService.set('alias', $scope.user.alias);
+                  localStorageService.set('validated', $scope.user.validated);
+                }
+                else{
+                  Notification.error("Tu cuenta no está habilitada");
+                  $scope.user = false;
+                  $scope.logout();
+                }
+              })
+
+              /* Error on login */
+              .error(function(status, data, headers, config){
+                Notification.error("Tu cuenta no está habilitada");
+                $scope.user = false;
+                $scope.logout();
+              });
+            }
+            else{
+              $scope.user.validated = true;
+            }
+          });
         });
-      });
+      }
     });
 
     /* If google auth fails */
