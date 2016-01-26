@@ -41,6 +41,10 @@ var officeDoors = angular.module('office-doors', [
   /* Google config */
   $rootScope.clientId = '778736666364-e4v4iod624hrmfa1mlnkulh7c7nhhci6.apps.googleusercontent.com';
 
+  /* Pusher config */
+  $rootScope.pusher = new Pusher('39430a9932b5bb99242f');
+  $rootScope.channel = $rootScope.pusher.subscribe('timbre_devspark');
+
   /* Door enabled */
   $rootScope.enabled = true;
 }]);

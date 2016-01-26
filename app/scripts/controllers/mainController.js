@@ -312,6 +312,20 @@ officeDoors.controller('mainController',
       // console.log(authResult);
     });
 
+    /* Pusher event, someone is opening the door */
+    $rootScope.channel.bind('estado_puerta', function(response) {
+      if($scope.user && $scope.user.validation == true && response && response.message === true){
+
+        /* If there is user data */
+        if(response.usuario && response.usuario != $scope.user.name){
+          Notification(response.usuario +" abrió la puerta");
+        }
+
+        $scope.openDoor();
+      }
+    });
+
+    /* Easter egg */
     $(document).on('keyup', function(e){
       if($scope.user && $scope.user.validated && $scope.user.validated === true){
 
