@@ -29,11 +29,13 @@
   <!-- Disconnect -->
   <a class="btn btn-danger" ng-click="logout()"><i class="glyphicon glyphicon-log-out" ></i> Desconectar</a>
 
-  <!-- Button -->
-  <span class="main-btn mobile" ng-click="openDoors(true)" ng-if="user.validated">
+  <!-- Mobile Button -->
+  <span class="main-btn" ng-click="openDoors(true)" ng-if="user.validated && isMobile">
     <i class="fa" ng-class="{'fa-lock': !open, 'fa-unlock': open}"></i>
   </span>
-  <span class="main-btn no-mobile" ng-click="openDoors(false)" ng-if="user.validated">
+
+  <!-- Desktop button -->
+  <span class="main-btn" ng-click="openDoors(false)" ng-if="user.validated && !isMobile">
     <i class="fa" ng-class="{'fa-lock': !open, 'fa-unlock': open}"></i>
   </span>
 

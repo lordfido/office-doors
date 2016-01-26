@@ -8,7 +8,7 @@ officeDoors.service('services',
       return $http({
         method: 'GET',
         url: SVC_URL.login + '?nombre=' + params.name + '&email=' + params.email + '&userId=' + params.userId
-      })
+      });
     };
 
     /* Open the door */
@@ -20,23 +20,36 @@ officeDoors.service('services',
       });
     };
 
-    /* Is mobile device */
-    service.isMobile = function(){
-      if( window.innerWidth >= 680){
-        return false;
-      }
-      else{
-        return true;
-      }
-    };
-
-    /* Open the door */
+    /* Say something */
     service.talk = function(params){
       return $http({
         method: 'POST',
         url: SVC_URL.talk,
         data: params
       });
+    };
+
+    /* Is mobile device */
+    service.isMobile = function(){
+
+      /* Declare mobile OOSS */
+      var OOSS = new Array();
+      OOSS.push("android");
+      OOSS.push("iphone os");
+      OOSS.push("windows phone");
+      OOSS.push("bb10");
+      OOSS.push("rim tablet os");
+
+      /* Go through the list */
+      for(var x in OOSS){
+
+        /* If there is a coincidence */
+        if( navigator.userAgent.toLowerCase().indexOf(OOSS[x]) > 0 && window.innerWidth <= 680){
+          return true;
+          break;
+        }
+      }
+      return false;
     };
 
     return service;

@@ -10,7 +10,7 @@ officeDoors.controller('mainController',
 
     $scope.init = function(){
       $scope.loaded = true;
-      $scope.isMobile = true;
+      $scope.isMobile = services.isMobile();
 
       $scope.enabled = $rootScope.enabled;
       $scope.cameraImg = SVC_URL.baseURL + imgName;
@@ -215,34 +215,18 @@ officeDoors.controller('mainController',
     /* Refresh camera image */
     $scope.imageRefresher = function(){
 
-      $scope.isMobile = services.isMobile();
-
       /* Only enable refresher on tablet+ */
-      if( $scope.isMobile ){
-
-        /* Update refresh time */
-        if(imgRefreshTime < 3000){
-          imgRefreshTime = 3000;
-        }
-
-      }
-      else{
-
-        /* Update refresh time */
-        if(imgRefreshTime >= 3000){
-          imgRefreshTime = 150;
-        }
+      if( !$scope.isMobile ){
 
         /* Update camera image */
         var cacheAvoider = new Date().getTime();
         $scope.cameraImg = SVC_URL.baseURL + imgName + "?t=" + cacheAvoider;
+
+        $timeout(function () {
+          $scope.imageRefresher();
+        }, imgRefreshTime);
       }
 
-      imgRefreshTime = 999999;
-
-      $timeout(function () {
-        $scope.imageRefresher();
-      }, imgRefreshTime);
     };
 
     /* If google auth works */
