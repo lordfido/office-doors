@@ -11,12 +11,12 @@
 </div>
 
 <!-- Anonimus: HUD panel -->
-<div ng-if="!user" class="hud">
+<div ng-if="!user" class="hud top left">
   <google-plus-signin clientid="{{ clientId }}" language="es"></google-plus-signin>
 </div>
 
 <!-- User: HUD panel -->
-<div ng-if="user" class="hud fixed-height">
+<div ng-if="user" class="hud top left fixed-height">
   <div class="user">
     <img ng-src="{{ user.image }}" />
     <span class="username">{{ user.name }}</span>
@@ -66,4 +66,10 @@
     <!-- <span class="btn btn-primary" ng-click="foodArrived()" ng-if="user.validated">
       <i class="fa fa-bell"></i> Llegó la comida
     </span> -->
+
+    <!-- Notifications switcher -->
+    <label class="switcher" ng-class="{'checked': activeNotifications}">
+      <input type="checkbox" ng-model="activeNotifications" />
+      <span>Notificaciones</span>
+    </label>
 </div>

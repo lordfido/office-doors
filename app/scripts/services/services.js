@@ -61,32 +61,36 @@ officeDoors.service('services',
     };
 
     /* Notify */
-    service.notify = function(text){
-      if( _notify && _notify.permission && _notify.permission === "granted" ){
-        var options = {
-          "body": text,
-          "icon": "icons/favicon.png"
+    service.notify = function(text, notify){
+      if(notify){
+        if( _notify && _notify.permission && _notify.permission === "granted" ){
+          var options = {
+            "body": text,
+            "icon": "icons/favicon.png"
+          }
+          var notification = new _notify("DevSpark DoorBell", options);
         }
-        var notification = new _notify("DevSpark DoorBell", options);
-      }
-      else{
-        Notification(text);
+        else{
+          Notification(text);
+        }
       }
     };
 
     /* Notify an error */
-    service.notifyError = function(text){
-      if( _notify && _notify.permission && _notify.permission === "granted" ){
-        var options = {
-          "body": text,
-          "icon": "icons/favicon.png"
+    service.notifyError = function(text, notify){
+      if(notify){
+        if( _notify && _notify.permission && _notify.permission === "granted" ){
+          var options = {
+            "body": text,
+            "icon": "icons/favicon.png"
+          }
+          var notification = new _notify("Error", options);
         }
-        var notification = new _notify("Error", options);
+        else{
+          Notification.error(text);
+        }
       }
-      else{
-        Notification.error(text);
-      }
-    }
+    };
 
     return service;
 }]);

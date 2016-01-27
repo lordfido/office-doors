@@ -98,24 +98,33 @@ body{
 }
 
 .hud{
-  position: relative;
+  position: absolute;
   display: block;
   float: none;
 
-  top: 20px;
   max-width: calc(100% - 40px);
-  max-height: calc(100% - 40px);
-  width: auto;
+  width: 100%;
   height: auto;
   padding: 10px;
   margin: 0px auto;
+  top: 20px;
+  left: 20px;
 
+  color: white;
   text-align: center;
 
   background-color: rgba(0, 0, 0, 0.3);
   border: none;
   border-radius: 4px;
   z-index: 20;
+}
+.hud.top{
+  top: 20px;
+  initial;
+}
+.hud.bottom{
+  top: initial;
+  bottom: 20px;
 }
 
 .hud > .user{
@@ -206,6 +215,73 @@ body{
   transform: scale(1.4, 1.4);
 }
 
+/* Switcher */
+.switcher{
+  position: relative;
+  display: inline-block;
+  float: left;
+
+  width: auto;
+  height: auto;
+  margin: 10px 0px;
+  padding: 0px;
+  margin-left: 20px;
+
+  cursor: pointer;
+}
+.switcher > input[type="checkbox"]{
+  display: none;
+}
+
+.switcher:before{
+  position: relative;
+  display: inline-block;
+  float: left;
+
+  width: 24px;
+  height: 12px;
+  margin-top: 2px;
+  margin-right: 16px;
+
+  background-color: #DDD;
+  border-radius: 10px;
+  content: ' ';
+}
+
+.switcher:after{
+  position: absolute;
+  display: inline-block;
+  float: none;
+
+  width: 18px;
+  height: 18px;
+  left: 6px;
+  top: 2px;
+  margin-top: -3px;
+  margin-left: -9px;
+
+  background-color: #BBB;
+  border-radius: 50%;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  content: ' ';
+
+  transition: all 0.3s;
+}
+.switcher.checked:after{
+  margin-left: 4px;
+
+  background-color: #337ab7;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.switcher > span{
+  position: relative;
+  display: inline-block;
+  float: left;
+
+  max-width: calc(100% - 40px);
+}
+
 .mobile{
   display: block !important;
 }
@@ -217,9 +293,18 @@ body{
 @media screen and (min-width: 680px){
 
   .hud{
+    width: auto;
+    left: initial;
+  }
+  .hud.left{
     float: left;
 
     left: 20px;
+  }
+  .hud.right{
+    float: right;
+
+    right: 20px;
   }
 
   .hud > .user{
