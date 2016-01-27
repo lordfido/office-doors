@@ -7,6 +7,7 @@ officeDoors.controller('mainController',
     var imgName = 'cam.jpg';
     var imgRefreshTime = 150;
     var coded = "";
+    var notifTimeout;
 
     $scope.init = function(){
 
@@ -67,6 +68,8 @@ officeDoors.controller('mainController',
           alias: localStorageService.get('alias'),
           validated: localStorageService.get('validated')
         };
+
+        $scope.activeNotifications = (localStorageService.get('notifications') === false) ? false : true;
 
         // $scope.$apply();
       }
@@ -265,6 +268,14 @@ officeDoors.controller('mainController',
         }, imgRefreshTime);
       }
 
+    };
+
+    /* Update notification config */
+    $scope.updateNotificationConfig = function(param){
+      clearTimeout( notifTimeout );
+      notifTimeout = setTimeout(function(){
+        localStorageService.set('notifications', param.activeNotifications);
+      }, 500);
     };
 
     /* If google auth works */

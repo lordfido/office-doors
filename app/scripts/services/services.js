@@ -63,12 +63,18 @@ officeDoors.service('services',
     /* Notify */
     service.notify = function(text, notify){
       if(notify){
-        if( _notify && _notify.permission && _notify.permission === "granted" ){
+        if( _notify && _notify.permission && _notify.permission === "granted" && !service.isMobile()){
+
           var options = {
             "body": text,
-            "icon": "icons/favicon.png"
-          }
-          var notification = new _notify("DevSpark DoorBell", options);
+            "icon": "icons/favicon.png",
+            "vibrate": [200, 100, 200]
+          };
+
+          var notif = new _notify("DevSpark DoorBell", options);
+          setTimeout(function(){
+            notif.close();
+          }, 5000);
         }
         else{
           Notification(text);
@@ -79,12 +85,16 @@ officeDoors.service('services',
     /* Notify an error */
     service.notifyError = function(text, notify){
       if(notify){
-        if( _notify && _notify.permission && _notify.permission === "granted" ){
+        if( _notify && _notify.permission && _notify.permission === "granted" && !service.isMobile() ){
           var options = {
             "body": text,
-            "icon": "icons/favicon.png"
+            "icon": "icons/favicon.png",
+            "vibrate": [200, 100, 200]
           }
           var notification = new _notify("Error", options);
+          setTimeout(function(){
+            notif.close();
+          }, 5000);
         }
         else{
           Notification.error(text);

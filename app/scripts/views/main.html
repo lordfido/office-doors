@@ -69,7 +69,7 @@
 
     <!-- Notifications switcher -->
     <label class="switcher" ng-class="{'checked': activeNotifications}">
-      <input type="checkbox" ng-model="activeNotifications" />
+      <input type="checkbox" ng-model="activeNotifications" ng-change="updateNotificationConfig(this)"/>
       <span>Notificaciones</span>
     </label>
 </div>
