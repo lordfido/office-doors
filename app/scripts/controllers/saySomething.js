@@ -2,6 +2,10 @@ officeDoors.controller('saySomething',
   ['$scope', '$uibModalInstance',
   function ($scope, $uibModalInstance) {
 
+    $scope.init = function(){
+      $("input[autofocus]").focus();
+    }
+
     $scope.talk = function(){
       var form = $scope.saySomething;
 
@@ -13,4 +17,6 @@ officeDoors.controller('saySomething',
     $scope.cancel = function () {
       $uibModalInstance.dismiss('cancel');
     };
+
+    $scope.init();
 }]);
