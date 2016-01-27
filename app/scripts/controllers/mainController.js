@@ -70,6 +70,7 @@ officeDoors.controller('mainController',
         };
 
         $scope.activeNotifications = (localStorageService.get('notifications') === false) ? false : true;
+        localStorageService.set('notifications', $scope.activeNotifications);
 
         // $scope.$apply();
       }
@@ -155,11 +156,11 @@ officeDoors.controller('mainController',
 
             if(response == "busy"){
 
-              services.notifyError("La puerta ya estaba abierta.", $scope.activeNotifications);
+              services.notifyError("La puerta ya estaba abierta.", localStorageService.get('notifications'));
             }
             else if(response == false){
 
-              services.notifyError("Por favor, inicia sesión para abrir la puerta.", $scope.activeNotifications);
+              services.notifyError("Por favor, inicia sesión para abrir la puerta.", localStorageService.get('notifications'));
             }
             else{
 
@@ -168,7 +169,7 @@ officeDoors.controller('mainController',
             }
           })
           .error(function(status, data, headers, config){
-            services.notifyError('Hubo un problema de conexión', $scope.activeNotifications);
+            services.notifyError('Hubo un problema de conexión', localStorageService.get('notifications'));
           });
         }
 
@@ -223,10 +224,10 @@ officeDoors.controller('mainController',
       var data = $rootScope.slack;
 
       services.announceFood(data).success(function(){
-        services.notify("Enviado a Slack", $scope.activeNotifications);
+        services.notify("Enviado a Slack", localStorageService.get('notifications'));
       })
       .error(function(status, data, headers, config){
-        services.notifyError("No se pudo enviar a Slack", $scope.activeNotifications);
+        services.notifyError("No se pudo enviar a Slack", localStorageService.get('notifications'));
       });
     }
 
@@ -336,7 +337,7 @@ officeDoors.controller('mainController',
                   // $scope.$apply();
                 }
                 else{
-                  services.notifyError("Tu cuenta no está habilitada", $scope.activeNotifications);
+                  services.notifyError("Tu cuenta no está habilitada", localStorageService.get('notifications'));
                   $scope.user = false;
                   $scope.logout();
                 }
@@ -344,7 +345,7 @@ officeDoors.controller('mainController',
 
               /* Error on login */
               .error(function(status, data, headers, config){
-                services.notifyError("Tu cuenta no está habilitada", $scope.activeNotifications);
+                services.notifyError("Tu cuenta no está habilitada", localStorageService.get('notifications'));
                 $scope.user = false;
                 $scope.logout();
               });
@@ -371,7 +372,7 @@ officeDoors.controller('mainController',
 
         /* If there is user data */
         if(response.token && response.token != $scope.user.userId){
-          services.notify(response.usuario +" abrió la puerta", $scope.activeNotifications);
+          services.notify(response.usuario +" abrió la puerta", localStorageService.get('notifications'));
         }
 
         $scope.openDoor();
