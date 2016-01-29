@@ -91,7 +91,7 @@ officeDoors.service('services',
             "icon": "icons/favicon.png",
             "vibrate": [200, 100, 200]
           }
-          var notification = new _notify("Error", options);
+          var notif = new _notify("Error", options);
           setTimeout(function(){
             notif.close();
           }, 5000);

@@ -18,6 +18,12 @@ html,body{overflow: hidden;}
 
 body{
   text-align: center;
+  min-width: 680px;
+  min-height: 480px;
+}
+body.website{
+  min-width: 0px;
+  min-height: 0px;
 }
 .video{
   position: fixed;

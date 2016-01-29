@@ -1,0 +1,50 @@
+{
+	"manifest_version": 2,
+
+	"name": "DevSpark DoorBell",
+	"description": "Small webapp to open office doors from your computer/mobile",
+	"version": "0.5",
+	"author": "ImperdibleSoft",
+
+	"icons": {
+		"256": "icons/favicon.png",
+		"128": "icons/favicon.png",
+		"52": "icons/favicon.png",
+		"36": "icons/favicon.png",
+		"24": "icons/favicon.png",
+		"16": "icons/favicon.png"
+	},
+
+	"omnibox": {
+		"keyword": "ddb"
+	},
+
+	"permissions": [
+		"background",
+		"notifications",
+		"http://172.17.1.58/*",
+		"http://*.google.com/*"
+	],
+
+	"browser_action": {
+		"default_icon": "icons/favicon.png",
+		"default_popup": "index.html"
+	},
+
+	"content_scripts": [{
+		"matches": ["http://172.17.1.58/*"],
+		"js": [
+			"bower_components/jquery/dist/jquery.min.js",
+			"scripts/config.js",
+			"scripts/informant.js"
+		]
+	}],
+
+	"background": {
+		"scripts": [
+			"bower_components/jquery/dist/jquery.min.js",
+			"scripts/config.js",
+			"scripts/background.js"
+		]
+	}
+}

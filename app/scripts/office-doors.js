@@ -58,5 +58,5 @@ var officeDoors = angular.module('office-doors', [
   };
 
   /* Door enabled */
-  $rootScope.enabled = true;
+  $rootScope.enabled = false;
 }]);
