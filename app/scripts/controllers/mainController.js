@@ -6,6 +6,8 @@ officeDoors.controller('mainController',
     var colorOpen = '#5cb85c';
     var imgName = 'cam.jpg';
     var imgRefreshTime = 150;
+    var animationStart;
+    var lastCheck;
     var coded = "";
     var notifTimeout;
 
@@ -189,12 +191,24 @@ officeDoors.controller('mainController',
       /* Set initial count */
       $scope.countdown.color = colorOpen;
 
+      /* Stores the animation starts */
+      animationStart = new Date().getTime();
+      lastCheck = new Date().getTime();
+
       /* Execute the countdown */
       $scope.timming();
     };
 
     /* Start the countdown */
     $scope.timming = function(){
+      console.log("Before "+ $scope.currentTime);
+
+      if((new Date().getTime() - lastCheck) > (imgRefreshTime + 1)){
+        $scope.currentTime = $scope.currentTime - (new Date().getTime() - animationStart);
+        console.log("After "+ $scope.currentTime);
+      }
+
+      lastCheck = new Date().getTime();
 
       $timeout(function(){
 
@@ -372,7 +386,13 @@ officeDoors.controller('mainController',
 
         /* If there is user data */
         if(response.token && response.token != $scope.user.userId){
-          services.notify(response.usuario +" abrió la puerta", localStorageService.get('notifications'));
+
+          if(response.selfOpen === true){
+            services.notify(response.usuario +" entró a la oficina.", localStorageService.get('notifications'));
+          }
+          else{
+            services.notify(response.usuario +" abrió la puerta.", localStorageService.get('notifications'));
+          }
         }
 
         $scope.openDoor();
