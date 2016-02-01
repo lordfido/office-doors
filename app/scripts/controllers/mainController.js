@@ -386,7 +386,13 @@ officeDoors.controller('mainController',
 
         /* If there is user data */
         if(response.token && response.token != $scope.user.userId){
-          services.notify(response.usuario +" abrió la puerta", localStorageService.get('notifications'));
+
+          if(response.selfOpen === true){
+            services.notify(response.usuario +" entró a la oficina.", localStorageService.get('notifications'));
+          }
+          else{
+            services.notify(response.usuario +" abrió la puerta.", localStorageService.get('notifications'));
+          }
         }
 
         $scope.openDoor();
