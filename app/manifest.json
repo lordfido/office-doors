@@ -15,15 +15,16 @@
 		"16": "icons/favicon.png"
 	},
 
-	"omnibox": {
-		"keyword": "ddb"
-	},
-
 	"permissions": [
 		"background",
 		"notifications",
 		"http://172.17.1.58/*",
-		"http://*.google.com/*"
+		"http://*.google.com/*",
+		"https://*.google.com/*",
+		"http://*.pusher.com/*",
+		"https://*.pusher.com/*",
+		"http://*.parse.com/*",
+		"https://*.parse.com/*"
 	],
 
 	"browser_action": {
@@ -39,6 +40,8 @@
 			"scripts/informant.js"
 		]
 	}],
+
+	"content_security_policy":"script-src 'self' https://*.google.com https://*.pusher.com https://*.parse.com; object-src 'self'",
 
 	"background": {
 		"scripts": [

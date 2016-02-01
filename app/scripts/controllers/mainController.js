@@ -302,7 +302,7 @@ officeDoors.controller('mainController',
       }
 
       /* If there is no user logged in */
-      else{
+      else if(location.protocol !== "chrome-extension://"){
 
         /* Load Google+ API */
         gapi.client.load('plus', 'v1', function(){

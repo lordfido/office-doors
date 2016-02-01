@@ -18,7 +18,7 @@ html,body{overflow: hidden;}
 
 body{
   text-align: center;
-  min-width: 680px;
+  min-width: 720px;
   min-height: 480px;
 }
 body.website{

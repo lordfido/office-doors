@@ -2,50 +2,6 @@
 
 /*	Init variables	*/
 
-/*	Custom search engine	*/
-chrome.omnibox.onInputStarted.addListener(function(){
-	console.log("Now you are searching");
-});
-
-chrome.omnibox.onInputChanged.addListener(function(text, suggest){
-
-	/*	Event triggered when the omnibox change	*/
-	console.log("You changed the text to: "+ text);
-
-	/*	Create a suggestion list based on text	*/
-	var suggestions = new Array();
-	suggestions.push( new SuggestResult("Hola", "We are working on this feature :)") );
-
-	/*	Return the suggestion list to the UI	*/
-	suggest(suggestions);
-
-});
-
-chrome.omnibox.onInputEntered.addListener(function(text, disposition){
-
-	/*	Event triggered when the search is completed/executed	*/
-	console.log("You finished your search: "+ text);
-
-	/**
-	/*	Choose how to display results
-	/*
-	/*	currentTab
-	/*	newForegroundTab
-	/*	newBackgroundTab
-	*/
-	disposition = "newForegroundTab";
-});
-
-chrome.omnibox.onInputCancelled.addListener(function(){
-	console.log("You cancelled your search");
-});
-
-var SuggestResult = function(content, description){
-	this.content = content;
-	this.description = description;
-};
-
-
 /*	Extension Logic	*/
 /*	Status connection, verify logged user	*/
 chrome.runtime.onConnect.addListener(function(status){
@@ -239,50 +195,3 @@ chrome.runtime.onConnect.addListener(function(setViewAllRecruitings){
 		});
 	}
 });
-
-/*	Creates a new Notification	*/
-var showNotification = function(text, notify){
-	if(notify){
-		var options = {
-			"body": text,
-			"icon": "icons/favicon.png",
-			"vibrate": [200, 100, 200]
-		}
-		var notif = new Notification("DevSpark DoorBell", options);
-		setTimeout(function(){
-			notif.close();
-		}, 5000);
-	}
-};
-
-function connectionError(param){
-	if(error == false){
-		var num = parseInt( Math.random() * 1000000 );
-		showNotification("Connection error", "There was a connection error. Please, wait a few minutes while we try to solve the problem.", num);
-	}
-	error = param;
-
-	/* Create connError connection	*/
-	var connError = chrome.runtime.connect({name: "connError"});
-
-	/*	Send the error	*/
-	connError.postMessage({
-		'error': error
-	});
-}
-
-function connectionRestored(){
-	if(error != false){
-		var num = parseInt( Math.random() * 1000000 );
-		showNotification("Connection restored", "Good news, the connection was restored!", num);
-	}
-	error = false;
-
-	/* Create connError connection	*/
-	var connError = chrome.runtime.connect({name: "connError"});
-
-	/*	Send the error	*/
-	connError.postMessage({
-		'error': error
-	});
-}
