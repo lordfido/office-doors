@@ -20,6 +20,7 @@ officeDoors.service('services',
       });
     };
 
+    /* Announce food arrival */
     service.announceFood = function(params){
       return $http({
         method: 'POST',

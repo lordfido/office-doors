@@ -5,7 +5,7 @@ officeDoors.controller('mainController',
     var colorClosed = '#d9534f';
     var colorOpen = '#5cb85c';
     var imgName = 'cam.jpg';
-    var imgRefreshTime = 150;
+    var imgRefreshTime = 1000;
     var animationStart;
     var lastCheck;
     var coded = "";
@@ -23,6 +23,7 @@ officeDoors.controller('mainController',
       $scope.notifications = (_notify && _notify.permission) ? true : false;
       $scope.notificationsAllowed = (_notify && _notify.permission === "granted") ? true : false;
       $scope.activeNotifications = true;
+      $scope.companies = $rootScope.companies;
 
       /* User data */
       $scope.userNamePattern = new RegExp("^([a-zA-Z0-9\\-\\_\\+]{3,})$");
@@ -234,11 +235,13 @@ officeDoors.controller('mainController',
     };
 
     /* Announce the food arrival in Slack */
-    $scope.foodArrived = function(){
-      var data = $rootScope.slack;
+    $scope.foodArrived = function(company){
+      var data = {
+        empresa: company
+      };
 
       services.announceFood(data).success(function(){
-        services.notify("Enviado a Slack", localStorageService.get('notifications'));
+        // services.notify("Enviado a Slack", localStorageService.get('notifications'));
       })
       .error(function(status, data, headers, config){
         services.notifyError("No se pudo enviar a Slack", localStorageService.get('notifications'));

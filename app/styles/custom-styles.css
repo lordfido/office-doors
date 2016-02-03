@@ -221,6 +221,11 @@ body.website{
   transform: scale(1.4, 1.4);
 }
 
+/* Buttons */
+.btn-primary{
+  margin: 5px;
+}
+
 /* Switcher */
 .switcher{
   position: relative;
