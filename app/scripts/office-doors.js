@@ -57,6 +57,11 @@ var officeDoors = angular.module('office-doors', [
     'text': '@here Ya llegó la comida y está esperando en la puerta. El encargado de hoy, que baje a pagar!'
   };
 
+  /* Food delivers */
+  $rootScope.companies = [
+    "Viandas del Sur", "Mikaela", "T. de sabores"
+  ];
+
   /* Door enabled */
   $rootScope.enabled = true;
 }]);

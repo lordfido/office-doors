@@ -63,9 +63,10 @@
     animation-delay="{{ countdown.animationDelay }}"></div>
 
     <!-- Food arrived -->
-    <!-- <span class="btn btn-primary" ng-click="foodArrived()" ng-if="user.validated">
-      <i class="fa fa-bell"></i> Llegó la comida
-    </span> -->
+    <span class="btn btn-primary" ng-repeat="comp in companies" ng-click="foodArrived(comp)" ng-if="user.validated">
+      <i class="fa fa-bell"></i> {{ comp }}
+    </span>
+    <br style="clear: both;" />
 
     <!-- Notifications switcher -->
     <label class="switcher" ng-class="{'checked': activeNotifications}">
