@@ -62,15 +62,16 @@
     animation="{{ countdown.animation }}"
     animation-delay="{{ countdown.animationDelay }}"></div>
 
-    <!-- Food arrived -->
-    <span class="btn btn-primary" ng-repeat="comp in companies" ng-click="foodArrived(comp)" ng-if="user.validated">
-      <i class="fa fa-bell"></i> {{ comp }}
-    </span>
-    <br style="clear: both;" />
+  <!-- Food arrived -->
+  <circular-dropdown on-select="foodArrived" options="companies" ng-if="user.validated"></circular-dropdown>
+  <!-- <span class="btn btn-primary" ng-repeat="comp in companies" ng-click="foodArrived(comp)" ng-if="user.validated">
+    <i class="fa fa-bell"></i> {{ comp }}
+  </span> -->
+  <br style="clear: both;" />
 
-    <!-- Notifications switcher -->
-    <label class="switcher" ng-class="{'checked': activeNotifications}">
-      <input type="checkbox" ng-model="activeNotifications" ng-change="updateNotificationConfig(this)"/>
-      <span>Notificaciones</span>
-    </label>
+  <!-- Notifications switcher -->
+  <label class="switcher" ng-class="{'checked': activeNotifications}">
+    <input type="checkbox" ng-model="activeNotifications" ng-change="updateNotificationConfig(this)"/>
+    <span>Notificaciones</span>
+  </label>
 </div>

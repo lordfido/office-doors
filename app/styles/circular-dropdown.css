@@ -1,0 +1,161 @@
+.circular-dropdown{
+  position: relative;
+  display: inline-block;
+  float: none;
+
+  width: auto;
+  height: auto;
+  padding: 0px;
+  margin: 10px auto;
+
+  text-align: center;
+  z-index: 99999;
+}
+
+/* Toggle button */
+.circular-dropdown .toggle{
+  position: relative;
+  display: block;
+  float: none;
+
+  width: 48px;
+  height: 48px;
+  padding: 0px;
+  margin: 0px auto;
+
+  color: black;
+  font-size: 20px;
+  line-height: 48px;
+  text-align: center;
+
+  background-color: white;
+  border: 0px;
+  border-radius: 50%;
+  outline: 0px;
+  transition: all 0.3s;
+
+  z-index: 20;
+}
+.circular-dropdown .toggle:hover{
+  width: 52px;
+  height: 52px;
+  margin: -2px;
+
+  line-height: 52px;
+
+  box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Options list */
+.circular-dropdown .options{
+  position: absolute;
+  display: block;
+  float: left;
+
+  width: 0px;
+  height: 0px;
+  top: 24px;
+  left: 24px;
+  margin: 0px;
+  padding: 0px;
+
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 10;
+}
+.circular-dropdown .options.open{
+  width: 250px;
+  height: 250px;
+  margin-top: -125px;
+  margin-left: -125px;
+}
+
+/* Option element */
+.circular-dropdown .options .option{
+  position: absolute;
+  display: block;
+  float: left;
+
+  width: auto;
+  height: 32px;
+  padding: 0px 10px;
+  margin: 0px;
+
+  color: black;
+  font-size: 14px;
+  line-height: 32px;
+  text-align: left;
+
+  background-color: white;
+  border: 0px;
+  border-radius: 32px;
+  vertical-align: middle;
+  opacity: 0;
+  overflow: hidden;
+}
+.circular-dropdown .options.open .option{
+  opacity: 1;
+}
+.circular-dropdown .options .option:hover{
+  box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* 1 option */
+.options.list1{}
+  .options.list1 .option1{
+    margin-top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+/* 2 options */
+.options.list2{}
+  .options.list2 .option{
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .options.list2 .option1{
+    margin-top: 20px;
+  }
+  .options.list2 .option2{
+    bottom: 0px;
+    margin-bottom: 20px;
+  }
+
+/* 3 options */
+.options.list3{}
+
+  .options.list3 .option1{
+    left: 50%;
+    margin-top: 20px;
+    transform: translateX(-50%);
+  }
+  .options.list3 .option2{
+    float: right;
+    right: 20px;
+    margin-top: 50%;
+    transform: translateY(-50%);
+  }
+  .options.list3 .option3{
+    float: left;
+    left: 50%;
+    bottom: 0px;
+    margin-bottom: 20px;
+    transform: translateX(-50%);
+  }
+
+/* 4 options */
+.options.list4{}
+
+/* 5 options */
+.options.list5{}
+
+/* 6 options */
+.options.list6{}
+
+/* 7 options */
+.options.list7{}
+
+/* 8 options */
+.options.list8{}

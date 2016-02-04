@@ -5,7 +5,7 @@ officeDoors.controller('mainController',
     var colorClosed = '#d9534f';
     var colorOpen = '#5cb85c';
     var imgName = 'cam.jpg';
-    var imgRefreshTime = 1000;
+    var imgRefreshTime = 300;
     var animationStart;
     var lastCheck;
     var coded = "";
@@ -114,6 +114,16 @@ officeDoors.controller('mainController',
       modalInstance.result.then(function (newAlias) {
         $scope.user.alias = newAlias;
         localStorageService.set('alias', $scope.user.alias);
+
+        var data = {
+          alias: $scope.user.alias
+        };
+        services.saveAlias(data).success(function(response){
+          services.notify("Tu nuevo alias se guardó con éxito.", localStorageService.get('notifications'));
+        })
+        .error(function(status, data, headers, response){
+          services.notifyError("Hubo un problema al guardar tu alias.", localStorageService.get('notifications'));
+        });
 
       /* Cancel */
       }, function () {

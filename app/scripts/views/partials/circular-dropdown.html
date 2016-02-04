@@ -1,0 +1,13 @@
+<!-- Base element -->
+<div class="circular-dropdown">
+
+  <!-- Toggle button -->
+  <button class="toggle" ng-click="toggle()"><i class="fa fa-bell"></i></button>
+
+  <!-- Options list -->
+  <ul ng-class="{'open': (open && open !== false)}" class="options list{{ options.length }}">
+    <li role="button" ng-repeat="opt in options"
+      class="option option{{ ($index + 1) }}"
+      ng-click="select(opt)">{{ opt }}</li>
+  </ul>
+</div>

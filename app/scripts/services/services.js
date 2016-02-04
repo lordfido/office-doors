@@ -6,8 +6,18 @@ officeDoors.service('services',
     /* Validate the user on uor database */
     service.login = function(params){
       return $http({
-        method: 'GET',
-        url: SVC_URL.login + '?nombre=' + params.name + '&email=' + params.email + '&userId=' + params.userId
+        method: 'POST',
+        url: SVC_URL.login,
+        data: params
+      });
+    };
+
+    /* Save alias */
+    service.saveAlias = function(params){
+      return $http({
+        method: 'POST',
+        url: SVC_URL.saveAlias,
+        data: params
       });
     };
 

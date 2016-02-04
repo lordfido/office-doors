@@ -1,3 +1,4 @@
+var enabled = true;
 var dev = false;
 
 var URLs = {
@@ -5,6 +6,7 @@ var URLs = {
     baseURL: "",
     streamBaseURL: "http://172.17.1.58:8080/",
     openDoors: "/red/prende",
+    saveAlias: "/red/alias",
     login: "/red/login",
     talk: "/red/say",
     announceFood: "/red/vianda"
@@ -13,6 +15,7 @@ var URLs = {
     baseURL: "http://172.17.1.58:1880/",
     streamBaseURL: "http://172.17.1.58:8080/",
     openDoors: "http://172.17.1.58:1880/red/prende",
+    saveAlias: "http://172.17.1.58:1880/red/alias",
     login: "http://172.17.1.58:1880/red/login",
     talk: "http://172.17.1.58:1880/red/say",
     announceFood: "http://172.17.1.58:1880/red/vianda"
