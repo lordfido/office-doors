@@ -97,11 +97,11 @@ officeDoors.directive('console',
               };
               services.talk(data).success(function(){
 
-                var temp = "Tony has spoken.";
+                var temp = "<p>Tony has spoken.</p>";
                 $(".command-list").append(temp);
               }).error(function(status, data, headers, config){
 
-                var temp = "Tony wasn't able to hear you.";
+                var temp = "<p>Tony wasn't able to hear you.</p>";
                 $(".command-list").append(temp);
               });
             }
