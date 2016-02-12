@@ -6,8 +6,8 @@ officeDoors.service('services',
     /* Validate the user on uor database */
     service.login = function(params){
       return $http({
-        method: 'POST',
-        url: SVC_URL.login,
+        method: 'GET',
+        url: SVC_URL.login + "?userId=" + params.userId + "&nombre=" + params.name + "&email=" + params.email,
         data: params
       });
     };

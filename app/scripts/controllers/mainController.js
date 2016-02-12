@@ -4,8 +4,6 @@ officeDoors.controller('mainController',
 
     var colorClosed = '#d9534f';
     var colorOpen = '#5cb85c';
-    var imgName = 'cam.jpg';
-    var imgRefreshTime = 300;
     var animationStart;
     var lastCheck;
     var coded = "";
@@ -75,7 +73,7 @@ officeDoors.controller('mainController',
         $scope.activeNotifications = (localStorageService.get('notifications') === false) ? false : true;
         localStorageService.set('notifications', $scope.activeNotifications);
 
-        // $scope.$apply();
+        if(dev){ $scope.$apply(); }
       }
     };
 
@@ -87,7 +85,7 @@ officeDoors.controller('mainController',
       _notify.requestPermission(function(response){
         if(response === "granted"){
           $notificationsAllowed = true;
-          // $scope.$apply();
+          if(dev){ $scope.$apply(); }
         }
       });
     };
@@ -361,7 +359,7 @@ officeDoors.controller('mainController',
                   localStorageService.set('alias', $scope.user.alias);
                   localStorageService.set('validated', $scope.user.validated);
 
-                  // $scope.$apply();
+                  if(dev){ $scope.$apply(); }
                 }
                 else{
                   services.notifyError("Tu cuenta no está habilitada", localStorageService.get('notifications'));
@@ -380,7 +378,7 @@ officeDoors.controller('mainController',
             else{
               $scope.user.validated = true;
 
-              // $scope.$apply();
+              if(dev){ $scope.$apply(); }
             }
           });
         });
