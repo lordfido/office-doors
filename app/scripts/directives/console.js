@@ -25,6 +25,7 @@ officeDoors.directive('console',
               }
               temp += "</ul>";
               $(".command-list").append(temp);
+              scope.scrollBottom();
             }
           );
           scope.commands.clear = new Command(
@@ -61,6 +62,7 @@ officeDoors.directive('console',
 
                 var temp = "Camera <b><span style=\'color: green;\'>fixed</span></b>.";
                 $(".command-list").append("<p>" + temp + "</p>");
+                scope.scrollBottom();
               });
             }
           );
@@ -79,11 +81,13 @@ officeDoors.directive('console',
 
                 var temp = "Server is <b><span style='color: green'>online</span></b>.";
                 $(".command-list").append(temp);
+                scope.scrollBottom();
 
               }).error(function(){
 
                 var temp = "Server is <b><span style='color: red'>offline</span></b>.";
                 $(".command-list").append(temp);
+                scope.scrollBottom();
               });
             }
           );
@@ -99,10 +103,12 @@ officeDoors.directive('console',
 
                 var temp = "<p>Tony has spoken.</p>";
                 $(".command-list").append(temp);
+                scope.scrollBottom();
               }).error(function(status, data, headers, config){
 
                 var temp = "<p>Tony wasn't able to hear you.</p>";
                 $(".command-list").append(temp);
+                scope.scrollBottom();
               });
             }
           );
@@ -115,7 +121,7 @@ officeDoors.directive('console',
           if(scope.open === true){
 
             /* Scrolls to new line */
-            $(".console").scrollTop( $(".new-line").offset().top );
+            scope.scrollBottom();
 
             /* Focus the new line */
             $(".console .new-line input").focus().select().click();
@@ -161,8 +167,13 @@ officeDoors.directive('console',
           $(".console .new-line input").val("");
 
           /* Scrolls to new line */
-          $(".console").scrollTop( $(".new-line").offset().top );
+          scope.scrollBottom();
         };
+
+        /* Scroll to new Line position */
+        scope.scrollBottom = function(){
+          $(".console").scrollTop( $(".command-list").height() + $(".new-line").height() );
+        }
 
         /* Command builder */
         function Command(name, description, callback){
