@@ -87,6 +87,25 @@ officeDoors.directive('console',
               });
             }
           );
+          scope.commands.say = new Command(
+            "say",
+            "Tony will say anything you want by the speakers.",
+            function(){
+              var text = scope.console.command.$modelValue;
+              var data = {
+                texto: text.substr(text.indexOf(" ") + 1)
+              };
+              services.talk(data).success(function(){
+
+                var temp = "Tony has spoken.";
+                $(".command-list").append(temp);
+              }).error(function(status, data, headers, config){
+
+                var temp = "Tony wasn't able to hear you.";
+                $(".command-list").append(temp);
+              });
+            }
+          );
         };
 
         /* Open/close the console */
@@ -119,7 +138,12 @@ officeDoors.directive('console',
           for(var x in scope.commands){
             var elem = scope.commands[x];
 
-            if(command === elem.name){
+            if(command === elem.name && elem.name !== "say"){
+              existing = true;
+              elem.exec();
+              break;
+            }
+            else if(elem.name === "say" && command.indexOf(elem.name) >= 0){
               existing = true;
               elem.exec();
               break;

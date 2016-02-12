@@ -12,7 +12,7 @@
 
   color: #ccc;
   font-family: monospace;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 16px;
   text-align: left;
 
@@ -44,7 +44,7 @@
 
   color: #ccc;
   font-family: monospace;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 16px;
   text-align: left;
 
@@ -63,7 +63,7 @@ input::-webkit-calendar-picker-indicator {
 .console ul li{
   color: #ccc;
   font-family: monospace;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 16px;
   text-align: left;
 }
