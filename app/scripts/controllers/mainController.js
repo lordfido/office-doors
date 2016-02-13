@@ -1,6 +1,6 @@
 officeDoors.controller('mainController',
-  ['$scope', '$rootScope', '$timeout', 'services', '$uibModal', 'localStorageService',
-  function ($scope, $rootScope, $timeout, services, $uibModal, localStorageService) {
+  ['$scope', '$rootScope', '$timeout', 'services', 'maintenanceServices', '$uibModal', 'localStorageService',
+  function ($scope, $rootScope, $timeout, services, maintenanceServices, $uibModal, localStorageService) {
 
     var colorClosed = '#d9534f';
     var colorOpen = '#5cb85c';
@@ -62,38 +62,59 @@ officeDoors.controller('mainController',
       /* Custom commands */
       $scope.console.customCommands = {
         cameraFix: {
-          name: "camera-fix",
-          description: "Reset camera capture proccess.",
+          name: "camera",
+          description: "Some actions related with camera capture.",
+          params: [
+            {
+              name: "reset",
+              description: "Reset camera capture proccess."
+            }
+          ],
           action: function(printLn, params){
-            printLn("Camera-fix request was sent.");
+            if(params){
+              if(params.reset){
+                printLn("Request was sent.");
 
-            maintenanceServices.cameraFix().then(function(response){
-              printLn("Camera <b><span style=\'color: green;\'>fixed</span></b>.");
-            })
-            .error(function(status, data, headers, config){
-              printLn("There was an <b><span style=\'color: red;\'>error</span></b> while fixing the camera.")
-            });
+                maintenanceServices.cameraFix().then(function(response){
+                  printLn("Camera <b><span style=\'color: green;\'>fixed</span></b>.");
+                })
+                .error(function(status, data, headers, config){
+                  printLn("There was an <b><span style=\'color: red;\'>error</span></b> while fixing the camera.")
+                });
+              }
+            }
           }
         },
         screenshot: {
           name: "screenshot",
           description: "Download a camera screenshot.",
+          params: false,
           action: function(printLn, params){
             window.open(SVC_URL.baseURL + imgName);
           }
         },
         serverStatus: {
-          name: "server-status",
-          description: "Ping backend service and verify if it's online.",
+          name: "server",
+          description: "Some actions related to the server.",
+          params: [
+            {
+              name: "status",
+              description: "Ping backend service and verify if it's online."
+            }
+          ],
           action: function(printLn, params){
-            services.talk().success(function(response){
+            if(params){
+              if(params.status){
+                services.talk().success(function(response){
 
-              printLn("Server is <b><span style='color: green'>online</span></b>.");
+                  printLn("Server is <b><span style='color: green'>online</span></b>.");
 
-            }).error(function(){
+                }).error(function(){
 
-              printLn("Server is <b><span style='color: red'>offline</span></b>.");
-            });
+                  printLn("Server is <b><span style='color: red'>offline</span></b>.");
+                });
+              }
+            }
           }
         }
       };
