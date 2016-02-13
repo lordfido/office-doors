@@ -61,7 +61,7 @@ officeDoors.controller('mainController',
 
       /* Custom commands */
       $scope.console.customCommands = {
-        cameraFix: {
+        camera: {
           name: "camera",
           description: "Some actions related with camera capture.",
           params: [
@@ -85,6 +85,33 @@ officeDoors.controller('mainController',
             }
           }
         },
+        say: {
+          name: 'say',
+          description: 'This command will prompt the specified text',
+          params: [
+            {
+              name: "text",
+              description: "The text that is going to be displayed."
+            }
+          ],
+          action: function(printLn, params){
+            if(params){
+              if(params.text){
+                var data = {
+                  texto: params.text
+                };
+                services.talk(data).success(function(response){
+                  printLn("Tony has spoken.");
+                }).error(function(status, data, headers, config){
+                  printLn("Tony wasn't able to hear you.");
+                });
+              }
+            }
+            else{
+              printLn("<span style='color: white;'>Error</span>: You need to specify (at least) one param.");
+            }
+          }
+        },
         screenshot: {
           name: "screenshot",
           description: "Download a camera screenshot.",
@@ -93,7 +120,7 @@ officeDoors.controller('mainController',
             window.open(SVC_URL.baseURL + imgName);
           }
         },
-        serverStatus: {
+        server: {
           name: "server",
           description: "Some actions related to the server.",
           params: [
