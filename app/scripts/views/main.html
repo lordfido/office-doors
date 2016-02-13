@@ -16,7 +16,17 @@
 </div>
 
 <!-- User: HUD panel -->
+<ng-console
+  open="false"
+  fixed="console.fixed"
+  fullscreen="false"
+  custom-height="false"
+  custom-prefix="console.customPrefix"
+  custom-commands="console.customCommands"></ng-console>
+
 <div ng-if="user" class="hud top left fixed-height">
+
+  <!-- User data -->
   <div class="user">
     <img ng-src="{{ user.image }}" />
     <span class="username">{{ user.name }}</span>

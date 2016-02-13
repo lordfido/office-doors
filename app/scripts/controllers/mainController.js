@@ -50,6 +50,54 @@ officeDoors.controller('mainController',
         animationDelay: 0
       };
 
+      /* Console */
+      $scope.console = {};
+
+      /* Fixed */
+      $scope.console.fixed = true;
+
+      /* Custom prefix */
+      $scope.console.customPrefix = "OfficeDoors DoorBell";
+
+      /* Custom commands */
+      $scope.console.customCommands = {
+        cameraFix: {
+          name: "camera-fix",
+          description: "Reset camera capture proccess.",
+          action: function(printLn, params){
+            printLn("Camera-fix request was sent.");
+
+            maintenanceServices.cameraFix().then(function(response){
+              printLn("Camera <b><span style=\'color: green;\'>fixed</span></b>.");
+            })
+            .error(function(status, data, headers, config){
+              printLn("There was an <b><span style=\'color: red;\'>error</span></b> while fixing the camera.")
+            });
+          }
+        },
+        screenshot: {
+          name: "screenshot",
+          description: "Download a camera screenshot.",
+          action: function(printLn, params){
+            window.open(SVC_URL.baseURL + imgName);
+          }
+        },
+        serverStatus: {
+          name: "server-status",
+          description: "Ping backend service and verify if it's online.",
+          action: function(printLn, params){
+            services.talk().success(function(response){
+
+              printLn("Server is <b><span style='color: green'>online</span></b>.");
+
+            }).error(function(){
+
+              printLn("Server is <b><span style='color: red'>offline</span></b>.");
+            });
+          }
+        }
+      };
+
       /* Functions */
       $scope.imageRefresher();
       $scope.getStoredData();

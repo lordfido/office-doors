@@ -1,4 +1,4 @@
-var dev = false;
+var dev = true;
 var enabled = !dev;
 
 var imgName = 'cam.jpg';
