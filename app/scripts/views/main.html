@@ -19,14 +19,7 @@
 <div ng-if="user" class="hud top left fixed-height">
 
   <!-- Maintenance console -->
-  <ng-console
-    open="false"
-    fixed="console.fixed"
-    fullscreen="false"
-    custom-height="false"
-    custom-prefix="console.customPrefix"
-    custom-commands="console.customCommands"></ng-console>
-
+  <ng-console options="console"></ng-console>
 
   <!-- User data -->
   <div class="user">
