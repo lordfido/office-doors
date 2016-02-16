@@ -57,7 +57,7 @@ officeDoors.controller('mainController',
       $scope.console.fixed = true;
 
       /* Custom prefix */
-      $scope.console.customPrefix = "OfficeDoors DoorBell";
+      $scope.console.customPrefix = "DevSpark DoorBell";
 
       /* Custom commands */
       $scope.console.customCommands = {
@@ -76,10 +76,10 @@ officeDoors.controller('mainController',
                 printLn("Request was sent.");
 
                 maintenanceServices.cameraFix().then(function(response){
-                  printLn("Camera <b><span style=\'color: green;\'>fixed</span></b>.");
+                  printLn("Camera <b style=\'color: green;\'>fixed</b>.");
                 })
                 .error(function(status, data, headers, config){
-                  printLn("There was an <b><span style=\'color: red;\'>error</span></b> while fixing the camera.")
+                  printLn("There was an <b style=\'color: red;\'>error</b> while fixing the camera.")
                 });
               }
             }
@@ -87,28 +87,31 @@ officeDoors.controller('mainController',
         },
         say: {
           name: 'say',
-          description: 'This command will prompt the specified text',
+          description: 'This command will cause that Tony will say the specified text.',
           params: [
             {
               name: "text",
-              description: "The text that is going to be displayed."
+              description: "The text that is going to be said by Tony."
             }
           ],
           action: function(printLn, params){
             if(params){
-              if(params.text){
+              if(params.text && (params.text == "" || params.text === true)){
+                printLn("<b>Error</b>: Please, specify some text in '<b>--text</b>' param.");
+              }
+              else if(params.text){
                 var data = {
                   texto: params.text
                 };
                 services.talk(data).success(function(response){
-                  printLn("Tony has spoken.");
+                  printLn("Tony has spoken, and he said: '"+ params.text +"'");
                 }).error(function(status, data, headers, config){
                   printLn("Tony wasn't able to hear you.");
                 });
               }
             }
             else{
-              printLn("<span style='color: white;'>Error</span>: You need to specify (at least) one param.");
+              printLn("<b>Error</b>: You need to specify the '<b>--text</b>' param.");
             }
           }
         },
@@ -134,11 +137,11 @@ officeDoors.controller('mainController',
               if(params.status){
                 services.talk().success(function(response){
 
-                  printLn("Server is <b><span style='color: green'>online</span></b>.");
+                  printLn("Server is <b style='color: green'>online</b>.");
 
                 }).error(function(){
 
-                  printLn("Server is <b><span style='color: red'>offline</span></b>.");
+                  printLn("Server is <b style='color: red'>offline</b>.");
                 });
               }
             }

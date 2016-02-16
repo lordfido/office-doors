@@ -8,7 +8,8 @@ var officeDoors = angular.module('office-doors', [
   'ui-notification',
   'angular-svg-round-progress',
   'directive.g+signin',
-  'LocalStorageModule'
+  'LocalStorageModule',
+  'ngConsole'
 ])
 
 /* Config notificaiton modules */
