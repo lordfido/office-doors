@@ -309,11 +309,8 @@ officeDoors.controller('mainController',
 
     /* Start the countdown */
     $scope.timming = function(){
-      console.log("Before "+ $scope.currentTime);
-
       if((new Date().getTime() - lastCheck) > (imgRefreshTime + 1)){
         $scope.currentTime = $scope.currentTime - (new Date().getTime() - animationStart);
-        console.log("After "+ $scope.currentTime);
       }
 
       lastCheck = new Date().getTime();
