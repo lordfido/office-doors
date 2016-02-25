@@ -10,7 +10,7 @@ gulp.task('default', ['webserver']);
 gulp.task('webserver', function() {
   return gulp.src("./app")
     .pipe(webserver({
-      host: '0.0.0.0',
+      host: 'localhost',
       port: '8080',
       livereload: true,
       open: true
