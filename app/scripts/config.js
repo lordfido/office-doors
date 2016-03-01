@@ -13,7 +13,9 @@ var URLs = {
     login: "/red/login",
     talk: "/red/say",
     announceFood: "/red/vianda",
-    cameraFix: "/red/camera"
+    cameraFix: "/red/camera",
+    startup: "/red/inicio",
+    restartServer: "/red/restart"
   },
   dev: {
     baseURL: "http://172.17.1.58:1880/",
@@ -23,7 +25,9 @@ var URLs = {
     login: "http://172.17.1.58:1880/red/login",
     talk: "http://172.17.1.58:1880/red/say",
     announceFood: "http://172.17.1.58:1880/red/vianda",
-    cameraFix: "http://172.17.1.58:1880/red/camera"
+    cameraFix: "http://172.17.1.58:1880/red/camera",
+    startup: "http://172.17.1.58:1880/red/inicio",
+    restartServer: "http://172.17.1.58:1880/red/restart"
   }
 };
 

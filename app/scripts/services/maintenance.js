@@ -11,5 +11,19 @@ officeDoors.service('maintenanceServices',
       });
     };
 
+    service.startup = function(){
+      return $http({
+        method: 'GET',
+        url: SVC_URL.startup
+      });
+    };
+
+    service.restart = function(){
+      return $http({
+        method: 'GET',
+        url: SVC_URL.restartServer
+      });
+    };
+
     return service;
 }]);

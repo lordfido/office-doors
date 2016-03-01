@@ -8,6 +8,183 @@ officeDoors.controller('mainController',
     var lastCheck;
     var coded = "";
     var notifTimeout;
+    var recurrentConnection = false;
+    var restarting = false;
+
+    var customCommands = {
+      camera: {
+        name: "camera",
+        description: "Some actions related with camera capture.",
+        params: [
+          {
+            name: "reset",
+            description: "Reset camera capture proccess."
+          }
+        ],
+        action: function(printLn, params){
+          if(params){
+            if(params.reset){
+              printLn("Request was sent.");
+
+              maintenanceServices.cameraFix().then(function(response){
+                printLn("Camera <b style=\'color: green;\'>fixed</b>.");
+              })
+              .error(function(status, data, headers, config){
+                printLn("There was an <b style=\'color: red;\'>error</b> while fixing the camera.")
+              });
+            }
+          }
+        }
+      },
+      say: {
+        name: 'say',
+        description: 'This command will cause that Tony will say the specified text.',
+        params: [
+          {
+            name: "text",
+            description: "The text that is going to be said by Tony."
+          }
+        ],
+        action: function(printLn, params){
+          if(params){
+            if(params.text && (params.text == "" || params.text === true)){
+              printLn("<b>Error</b>: Please, specify some text in '<b>--text</b>' param.");
+            }
+            else if(params.text){
+              var data = {
+                texto: params.text
+              };
+              services.talk(data).success(function(response){
+                printLn("Tony has spoken, and he said: '"+ params.text +"'");
+              }).error(function(status, data, headers, config){
+                printLn("Tony wasn't able to hear you.");
+              });
+            }
+          }
+          else{
+            printLn("<b>Error</b>: You need to specify the '<b>--text</b>' param.");
+          }
+        }
+      },
+      screenshot: {
+        name: "screenshot",
+        description: "Download a camera screenshot.",
+        params: false,
+        action: function(printLn, params){
+          window.open(SVC_URL.baseURL + imgName);
+        }
+      },
+      server: {
+        name: "server",
+        description: "Some actions related to the server.",
+        params: [
+          {
+            name: "init",
+            description: "Apply init config."
+          },
+          {
+            name: "restart",
+            description: "Restart the backend server, and notify when it's online again."
+          },
+          {
+            name: "status",
+            description: "Ping backend service and verify if it's online."
+          },
+          {
+            name: "stop",
+            description: "Stop all recurrent connections."
+          }
+        ],
+        action: function(printLn, params){
+          if(params){
+
+            /* Apply init config */
+            var startup = function(){
+              maintenanceServices.startup().success(function(){
+                printLn("Init config implemented.");
+              })
+              .error(function(status, data, headers, config){
+                printLn("<b>Error</b>: Init config was not implemented.")
+              });
+            }
+
+            /* Verify if the server is online */
+            var checkBackendStatus = function(silentMode){
+
+              /* Call a random service */
+              services.talk().success(function(response){
+
+                /* If it's a recurrent check */
+                if(recurrentConnection == true){
+
+                  /* Force silentmode = false */
+                  silentMode = false;
+                  recurrentConnection = false;
+                }
+
+                /* If it's not silent mode */
+                if(!silentMode){
+                  printLn("Server is <b style='color: green'>online</b>.");
+                }
+
+                /* If we were restarting */
+                if(restarting === true){
+                  restarting = false;
+                  startup();
+                }
+
+              })
+              .error(function(){
+
+                if(!silentMode){
+                  printLn("Server is <b style='color: red'>offline</b>.");
+                }
+
+                if(recurrentConnection == true){
+
+                  /* Inform the user */
+                  printLn("Waiting for the server to wake up");
+
+                  /* Call function again */
+                  setTimeout(function(){
+                    checkBackendStatus(silentMode);
+                  }, 3000);
+                }
+              });
+            };
+
+            /* Makes a recurrent check */
+            var permanentCheck = function(){
+              recurrentConnection = true;
+              restarting = true;
+              checkBackendStatus(true);
+            };
+
+            if(params.init){
+              startup();
+            }
+
+            if(params.restart){
+
+              /* Restart the machine */
+              maintenanceServices.restart().success(function(response){
+                permanentCheck();
+              }).error(function(status, data, headers, config){
+                permanentCheck();
+              });
+            }
+
+            if(params.status){
+              checkBackendStatus();
+            }
+
+            if(params.stop){
+              recurrentConnection = false;
+            }
+          }
+        }
+      }
+    };
 
     $scope.init = function(){
 
@@ -60,94 +237,7 @@ officeDoors.controller('mainController',
       $scope.console.customPrefix = "DevSpark DoorBell";
 
       /* Custom commands */
-      $scope.console.customCommands = {
-        camera: {
-          name: "camera",
-          description: "Some actions related with camera capture.",
-          params: [
-            {
-              name: "reset",
-              description: "Reset camera capture proccess."
-            }
-          ],
-          action: function(printLn, params){
-            if(params){
-              if(params.reset){
-                printLn("Request was sent.");
-
-                maintenanceServices.cameraFix().then(function(response){
-                  printLn("Camera <b style=\'color: green;\'>fixed</b>.");
-                })
-                .error(function(status, data, headers, config){
-                  printLn("There was an <b style=\'color: red;\'>error</b> while fixing the camera.")
-                });
-              }
-            }
-          }
-        },
-        say: {
-          name: 'say',
-          description: 'This command will cause that Tony will say the specified text.',
-          params: [
-            {
-              name: "text",
-              description: "The text that is going to be said by Tony."
-            }
-          ],
-          action: function(printLn, params){
-            if(params){
-              if(params.text && (params.text == "" || params.text === true)){
-                printLn("<b>Error</b>: Please, specify some text in '<b>--text</b>' param.");
-              }
-              else if(params.text){
-                var data = {
-                  texto: params.text
-                };
-                services.talk(data).success(function(response){
-                  printLn("Tony has spoken, and he said: '"+ params.text +"'");
-                }).error(function(status, data, headers, config){
-                  printLn("Tony wasn't able to hear you.");
-                });
-              }
-            }
-            else{
-              printLn("<b>Error</b>: You need to specify the '<b>--text</b>' param.");
-            }
-          }
-        },
-        screenshot: {
-          name: "screenshot",
-          description: "Download a camera screenshot.",
-          params: false,
-          action: function(printLn, params){
-            window.open(SVC_URL.baseURL + imgName);
-          }
-        },
-        server: {
-          name: "server",
-          description: "Some actions related to the server.",
-          params: [
-            {
-              name: "status",
-              description: "Ping backend service and verify if it's online."
-            }
-          ],
-          action: function(printLn, params){
-            if(params){
-              if(params.status){
-                services.talk().success(function(response){
-
-                  printLn("Server is <b style='color: green'>online</b>.");
-
-                }).error(function(){
-
-                  printLn("Server is <b style='color: red'>offline</b>.");
-                });
-              }
-            }
-          }
-        }
-      };
+      $scope.console.customCommands = customCommands;
 
       /* Functions */
       $scope.imageRefresher();
