@@ -60,7 +60,10 @@ var officeDoors = angular.module('office-doors', [
 
   /* Food delivers */
   $rootScope.companies = [
-    "Viandas del Sur", "Micaela", "Joya Manteca", "Generico"
+    { name: "Viandas del Sur", text: "Viandas del Sur"},
+    { name: "Micaela", text: "Micaela" },
+    { name: "Joya Manteca", text: "Joya Manteca" },
+    { name: "Otro", text: "el pedido de comida del antro desconocido al que pidieron" }
   ];
 
   /* Door enabled */
