@@ -59,7 +59,7 @@
   margin: 0px;
   padding: 0px;
 
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
   border-radius: 50%;
   overflow: hidden;
   z-index: 10;
@@ -147,6 +147,28 @@
 
 /* 4 options */
 .options.list4{}
+  .options.list4 .option1{
+    left: 50%;
+    margin-top: 20px;
+    transform: translateX(-50%);
+  }
+  .options.list4 .option2{
+    right: 10px;
+    margin-top: 50%;
+    transform: translateY(-50%);
+  }
+  .options.list4 .option3{
+    float: left;
+    left: 50%;
+    bottom: 0px;
+    margin-bottom: 20px;
+    transform: translateX(-50%);
+  }
+  .options.list4 .option4{
+    left: 10px;
+    margin-top: 50%;
+    transform: translateY(-50%);
+  }
 
 /* 5 options */
 .options.list5{}
